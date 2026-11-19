@@ -2,6 +2,8 @@ package com.cauanengdev.heliusedunexus.domain.model;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Getter(AccessLevel.PUBLIC)
@@ -15,14 +17,14 @@ public class SubjectReportCard {
     @Setter(AccessLevel.NONE)
     private List<Exam> exams;
 
-    public double getAverageGrade() {
-        double averageGrade = 0;
+    public BigDecimal getAverageGrade() {
+        BigDecimal totalGrade = BigDecimal.ZERO;
 
         for (Exam exam : exams) {
-            averageGrade += exam.grade();
+            totalGrade = totalGrade.add(exam.grade());
         }
 
-        return averageGrade / exams.size();
+        return totalGrade.divide(BigDecimal.valueOf(exams.size()), 1,  RoundingMode.HALF_UP);
     }
 
     public void addExam(Exam exam) {

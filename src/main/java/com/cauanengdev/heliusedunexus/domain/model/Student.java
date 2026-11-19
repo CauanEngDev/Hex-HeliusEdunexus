@@ -1,14 +1,36 @@
 package com.cauanengdev.heliusedunexus.domain.model;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDate;
 import java.time.Year;
-import java.util.NavigableMap;
-import java.util.TreeMap;
+import java.util.*;
 
 public class Student extends Person {
     private NavigableMap<Year, YearReportCard> reportCards;
 
-    public Student() {
-        reportCards = new TreeMap<>();
+    @Getter(AccessLevel.PUBLIC)
+    @Setter(AccessLevel.PUBLIC)
+    private Responsible responsible;
+
+    public Student(String firstName, String lastName, String phone,
+                   LocalDate birthday, String email, Address address,
+                   Responsible responsible) {
+
+        super(firstName, Optional.ofNullable(lastName), phone, birthday, email, address);
+        this.reportCards = new TreeMap<>();
+        this.responsible = responsible;
+    }
+
+    public Student(UUID id, String firstName, String lastName, String phone,
+                   LocalDate birthday, String email, Address address,
+                   Responsible responsible) {
+
+        super(id, firstName, Optional.ofNullable(lastName), phone, birthday, email, address);
+        this.reportCards = new TreeMap<>();
+        this.responsible = responsible;
     }
 
     public YearReportCard getCurrentReportCard() { return reportCards.lastEntry().getValue(); }
@@ -19,5 +41,5 @@ public class Student extends Person {
 
     public void removeReportCard(Year year) { reportCards.remove(year); }
 
-    
+    public List<YearReportCard> getAllReportCards() { return new ArrayList<>(reportCards.values()); }
 }

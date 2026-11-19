@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.UUID;
 
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
@@ -25,6 +26,17 @@ public abstract class Person {
     public Person(String firstName, Optional<String> lastName, String phone,
                   LocalDate birthday, String email, Address address) {
         this.personId = new PersonId();
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.birthday = birthday;
+        this.email = email;
+        this.address = address;
+    }
+
+    public Person(UUID id, String firstName, Optional<String> lastName, String phone,
+                  LocalDate birthday, String email, Address address) {
+        this.personId = new PersonId(id);
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;

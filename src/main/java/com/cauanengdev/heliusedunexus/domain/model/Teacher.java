@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Teacher extends Person implements Responsible {
     private Map<PersonId, Student> wards;
-    private List<Subject> qualifications;
+    private EnumSet<Subject> qualifications;
 
     @Getter(AccessLevel.PUBLIC)
     @Setter(AccessLevel.PUBLIC)
@@ -18,7 +18,15 @@ public class Teacher extends Person implements Responsible {
         super(firstName, Optional.ofNullable(lastName), phone, birthday, email, address);
         this.degreeLevel = degreeLevel;
         this.wards = new HashMap<>();
-        this.qualifications = new ArrayList<>();
+        this.qualifications = EnumSet.noneOf(Subject.class);
+    }
+
+    public Teacher(UUID id, String firstName, String lastName, String phone, LocalDate birthday,
+                   String email, Address address, AcademicDegree degreeLevel) {
+        super(id, firstName, Optional.ofNullable(lastName), phone, birthday, email, address);
+        this.degreeLevel = degreeLevel;
+        this.wards = new HashMap<>();
+        this.qualifications = EnumSet.noneOf(Subject.class);
     }
 
     @Override

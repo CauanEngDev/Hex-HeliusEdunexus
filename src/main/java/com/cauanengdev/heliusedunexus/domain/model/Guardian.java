@@ -12,6 +12,12 @@ public class Guardian extends Person implements Responsible {
         this.wards = new HashMap<>();
     }
 
+    public Guardian(UUID id, String firstName, String lastName, String phone,
+                    LocalDate birthday, String email, Address address) {
+        super(id, firstName, Optional.ofNullable(lastName), phone, birthday, email, address);
+        this.wards = new HashMap<>();
+    }
+
     @Override
     public List<Student> getWards() {
         return new ArrayList<>(wards.values());
