@@ -145,6 +145,10 @@ public class Classroom {
         }
     }
 
+    public String getFullClassroomName() {
+        return this.getStage() + " - " + this.getGrade() + "º " + this.getSection();
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Classroom other) {
