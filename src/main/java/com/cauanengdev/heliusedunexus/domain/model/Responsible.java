@@ -7,11 +7,4 @@ public interface Responsible {
     void addWard(Student ward);
     void removeWard(PersonId wardId);
     void switchWard(Student ward, Responsible newResponsible);
-
-    default String getFullName() {
-        if (this instanceof Person person) {
-            return person.getFullName();
-        }
-        return this.toString();
-    }
 }

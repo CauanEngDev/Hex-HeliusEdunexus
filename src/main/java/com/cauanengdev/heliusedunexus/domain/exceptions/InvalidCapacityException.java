@@ -1,7 +1,7 @@
 package com.cauanengdev.heliusedunexus.domain.exceptions;
 
-public class InvalidCapacityException extends RuntimeException {
+public class InvalidCapacityException extends DomainException {
     public InvalidCapacityException(int capacity) {
-        super("Capacity " + capacity + " is smalller than 1 or greater than enrolled students!");
+        super("Capacity " + capacity + " is greater than enrolled students!");
     }
 }
