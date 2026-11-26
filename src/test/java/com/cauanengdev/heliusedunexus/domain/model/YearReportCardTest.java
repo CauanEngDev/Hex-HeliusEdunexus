@@ -19,8 +19,8 @@ public class YearReportCardTest {
         classroom = new Classroom("A", Year.of(2026), 1, 30, SchoolStage.HIGH_SCHOOL);
         yearReportCard = new YearReportCard(classroom);
 
-        mathReportCard = new SubjectReportCard(3, Subject.MATH, new ArrayList<>());
-        physicsReportCard = new SubjectReportCard(3, Subject.PHYSICS, new ArrayList<>());
+        mathReportCard = new SubjectReportCard(3, Subject.MATH);
+        physicsReportCard = new SubjectReportCard(3, Subject.PHYSICS);
     }
 
     @Test
@@ -57,7 +57,7 @@ public class YearReportCardTest {
 
     @Test
     public void should_replaceSubjectReportCard_when_editSubjectReportCardIsCalled() {
-        SubjectReportCard updatedMathReportCard = new SubjectReportCard(4, Subject.MATH, new ArrayList<>());
+        SubjectReportCard updatedMathReportCard = new SubjectReportCard(4, Subject.MATH);
         yearReportCard.addSubjectReportCard(Subject.MATH, mathReportCard);
 
         yearReportCard.editSubjectReportCard(Subject.MATH, updatedMathReportCard);

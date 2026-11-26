@@ -1,5 +1,6 @@
 package com.cauanengdev.heliusedunexus.domain.model;
 
+import com.cauanengdev.heliusedunexus.domain.exceptions.StudentAlreadyEnrolledException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,7 +38,12 @@ public class Student extends Person {
 
     public YearReportCard getReportCardByYear(Year year) { return reportCards.get(year); }
 
-    public void addReportCard(Year year, YearReportCard reportCard) { reportCards.put(year, reportCard); }
+    public void addReportCard(Year year, YearReportCard reportCard) {
+        if (reportCards.containsKey(year)) {
+            throw new StudentAlreadyEnrolledException(this.getPersonId(), year);
+        }
+        reportCards.put(year, reportCard);
+    }
 
     public void removeReportCard(Year year) { reportCards.remove(year); }
 

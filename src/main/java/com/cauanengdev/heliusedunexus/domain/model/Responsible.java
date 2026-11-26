@@ -7,4 +7,8 @@ public interface Responsible {
     void addWard(Student ward);
     void removeWard(PersonId wardId);
     void switchWard(Student ward, Responsible newResponsible);
+
+    default PersonId getPersonId() {
+        return ((Person) this).getPersonId();
+    }
 }

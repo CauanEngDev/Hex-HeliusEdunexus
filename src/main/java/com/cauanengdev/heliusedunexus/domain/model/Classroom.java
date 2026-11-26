@@ -1,5 +1,6 @@
 package com.cauanengdev.heliusedunexus.domain.model;
 
+import com.cauanengdev.heliusedunexus.domain.exceptions.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +24,7 @@ public class Classroom {
     @Setter(AccessLevel.NONE)
     private int grade;
 
-    @Setter(AccessLevel.PUBLIC)
+    @Setter(AccessLevel.NONE)
     private int capacity;
 
     @Setter(AccessLevel.NONE)
@@ -89,10 +90,18 @@ public class Classroom {
         return studentCount > 0 ? totalAverage.divide(BigDecimal.valueOf(studentCount), 2, RoundingMode.HALF_UP) : BigDecimal.ZERO;
     }
 
-    public void addStudent(Student student) {
-        if (studentIds.size() < capacity) {
-            studentIds.add(student.getPersonId());
+    public void changeCapacity(int newCapacity) {
+        if (newCapacity < studentIds.size() || newCapacity <= 0) {
+            throw new InvalidCapacityException(newCapacity);
         }
+        this.capacity = newCapacity;
+    }
+
+    public void addStudent(Student student) {
+        if (studentIds.size() == capacity) {
+            throw new ClassroomFullException(this.getClassroomId(), student.getPersonId());
+        }
+        studentIds.add(student.getPersonId());
     }
 
     public void removeStudent(Student student) {
@@ -100,13 +109,29 @@ public class Classroom {
     }
 
     public void switchStudent(Student studentToSwitch, Classroom newClassroom) {
-        if (studentIds.contains(studentToSwitch.getPersonId()) && newClassroom.getStudentIds().size() < newClassroom.getCapacity()) {
-            newClassroom.addStudent(studentToSwitch);
-            studentIds.remove(studentToSwitch.getPersonId());
+        if (newClassroom.studentIds.size() == newClassroom.capacity ||
+                !newClassroom.getYear().equals(this.getYear()) ||
+                !this.getStudentIds().contains(studentToSwitch.getPersonId())) {
+
+            throw new SwitchStudentForClassException(studentToSwitch.getPersonId(),
+                                                     this.getClassroomId(),
+                                                     this.getCapacity(),
+                                                     newClassroom.getClassroomId(),
+                                                     newClassroom.getCapacity()
+            );
         }
+        newClassroom.addStudent(studentToSwitch);
+        studentIds.remove(studentToSwitch.getPersonId());
     }
 
     public void assignTeacherToSubject(Subject subject, Teacher teacher) {
+        if (!this.hasSubject(subject) || this.teachersBySubject.get(subject).equals(teacher)) {
+            throw new AssignTeacherForClassException(teacher.getPersonId(), this.getClassroomId(), subject);
+        }
+        if (!teacher.getQualifications().contains(subject)) {
+            throw new TeacherNotQualifiedException(teacher.getPersonId(), subject);
+        }
+
         teachersBySubject.put(subject, teacher);
     }
 
@@ -115,34 +140,16 @@ public class Classroom {
     }
 
     private void validateGradeAndStage(SchoolStage newStage, int newGrade) {
-        switch (newStage) {
-            case KINDERGARTEN -> {
-                if (newGrade >= 1 && newGrade <= 3) {
-                    this.stage = newStage;
-                    this.grade = newGrade;
-                }
-            }
-            case ELEMENTARY -> {
-                if (newGrade >= 1 && newGrade <= 5) {
-                    this.stage = newStage;
-                    this.grade = newGrade;
-                }
-            }
-
-            case MIDDLE_SCHOOL -> {
-                if (newGrade >= 6 && newGrade <= 9) {
-                    this.stage = newStage;
-                    this.grade = newGrade;
-                }
-            }
-
-            case HIGH_SCHOOL -> {
-                if (newGrade >= 1 && newGrade <= 3) {
-                    this.stage = newStage;
-                    this.grade = newGrade;
-                }
-            }
+        if (!newStage.isValidGrade(newGrade)) {
+            throw new InvalidGradeException(newGrade, newStage);
         }
+
+        this.stage = newStage;
+        this.grade = newGrade;
+    }
+
+    public boolean hasSubject(Subject subject) {
+        return teachersBySubject.containsKey(subject);
     }
 
     public String getFullClassroomName() {

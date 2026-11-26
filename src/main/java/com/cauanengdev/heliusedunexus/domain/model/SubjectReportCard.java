@@ -1,14 +1,14 @@
 package com.cauanengdev.heliusedunexus.domain.model;
 
+import com.cauanengdev.heliusedunexus.domain.exceptions.InvalidExpectedExamsException;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter(AccessLevel.PUBLIC)
-@Setter(AccessLevel.PUBLIC)
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class SubjectReportCard {
     private int expectedExams;
@@ -16,6 +16,19 @@ public class SubjectReportCard {
 
     @Setter(AccessLevel.NONE)
     private List<Exam> exams;
+
+    public SubjectReportCard(int expectedExams, Subject subject) {
+        if (expectedExams <= 0) throw new InvalidExpectedExamsException();
+
+        this.subject = subject;
+        this.expectedExams = expectedExams;
+        this.exams = new ArrayList<>();
+    }
+
+    public void setExpectedExams(int expectedExams) {
+        if (expectedExams <= 0) throw new InvalidExpectedExamsException();
+        this.expectedExams = expectedExams;
+    }
 
     public BigDecimal getAverageGrade() {
         BigDecimal totalGrade = BigDecimal.ZERO;

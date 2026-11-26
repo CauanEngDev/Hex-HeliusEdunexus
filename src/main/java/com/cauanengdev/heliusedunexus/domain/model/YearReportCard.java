@@ -1,5 +1,6 @@
 package com.cauanengdev.heliusedunexus.domain.model;
 
+import com.cauanengdev.heliusedunexus.domain.exceptions.SubjectWithoutTeacherException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,6 +37,10 @@ public class YearReportCard {
     }
 
     public void addSubjectReportCard(Subject subject, SubjectReportCard subjectReportCard) {
+        if (this.getClassroom().getTeacherBySubject(subject) == null) {
+            throw new SubjectWithoutTeacherException(this.getClassroom().getClassroomId(), subject);
+        }
+
         subjectReports.put(subject, subjectReportCard);
     }
 

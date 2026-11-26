@@ -1,5 +1,7 @@
 package com.cauanengdev.heliusedunexus.domain.model;
 
+import com.cauanengdev.heliusedunexus.domain.exceptions.SwitchStudentForResponsibleException;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -35,6 +37,10 @@ public class Guardian extends Person implements Responsible {
 
     @Override
     public void switchWard(Student ward, Responsible newResponsible) {
+        if (newResponsible.getWards().contains(ward)) {
+            throw new SwitchStudentForResponsibleException(ward.getPersonId(), newResponsible.getPersonId());
+        }
+
         this.removeWard(ward.getPersonId());
         newResponsible.addWard(ward);
     }

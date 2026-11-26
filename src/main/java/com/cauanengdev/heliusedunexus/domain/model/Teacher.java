@@ -1,5 +1,6 @@
 package com.cauanengdev.heliusedunexus.domain.model;
 
+import com.cauanengdev.heliusedunexus.domain.exceptions.SwitchStudentForResponsibleException;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -46,6 +47,10 @@ public class Teacher extends Person implements Responsible {
 
     @Override
     public void switchWard(Student ward, Responsible newResponsible) {
+        if (newResponsible.getWards().contains(ward)) {
+            throw new SwitchStudentForResponsibleException(ward.getPersonId(), newResponsible.getPersonId());
+        }
+
         this.removeWard(ward.getPersonId());
         newResponsible.addWard(ward);
     }

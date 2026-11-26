@@ -14,7 +14,7 @@ public class SubjectReportCardTest {
 
     @BeforeEach
     public void setUp() {
-        reportCard = new SubjectReportCard(3, Subject.MATH, new ArrayList<>());
+        reportCard = new SubjectReportCard(3, Subject.MATH);
     }
 
     private Exam createExam(int index, String grade) {
